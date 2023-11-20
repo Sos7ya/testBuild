@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>dodo_NY_Unity</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    body {
+      height: 100%;
+      width: 100%;
+      text-align: center;
+    }
+
+    @font-face {
+      font-family: "Dodo Rounded Black";
+      src: url('assets/fonts/DodoRoundedBlack-Expanded.ttf');
+    }
+
+    @font-face {
+      font-family: "Dodo Rounded v2";
+      src: url('assets/fonts/DodoRounded_v2-Bold.otf');
+    }
+
+    @font-face {
+      font-family: "Dodo Rounded v2 Regular";
+      src: url('assets/fonts/DodoRounded_v2-Regular.otf');
+    }
+
+    #unity-canvas {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      background-image: url(loadingBG.png);
+      background-size: cover;
+    }
+
+    #unity-loading-bar {
+      position: absolute;
+      left: 30%;
+      top: 50%;
+      width: 40%;
+      height: 1.5rem;
+      background-color: #FDF5E7;
+      border: 1px solid #FDF5E7;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    #unity-progress-bar {
+      position: absolute;
+      left: 0%;
+      top: 0%;
+      width: 1%;
+      height: 100%;
+      background-color: #FA8322;
+      border-radius: 10px;
+      transition: 400ms linear;
+      z-index: 1;
+    }
+
+    #unity-progress-logo {
+      color: #FDF5E7;
+      position: absolute;
+      top: 40vh;
+      left: 25%;
+      flex-shrink: 0;
+      text-align: center;
+      font-family: "Dodo Rounded Black";
+      font-size: 6vw;
+      font-style: normal;
+      font-weight: 900;
+      line-height: normal;
+    }
+
+    #unity-progress-text {
+      color: #FDF5E7;
+      position: absolute;
+      top: 45vh;
+      left: 35%;
+      flex-shrink: 0;
+      text-align: center;
+      font-family: "Dodo Rounded v2";
+      font-size: 3vw;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+    }
+
+    #procents {
+      position: absolute;
+      top: 0.2vh;
+      left: 15vw;
+      color: #FA8322;
+      -webkit-text-stroke: #FDF5E7 0.09vh;		
+      font-style: "Dodo Rounded Black";
+      font-size: 5.5vw;
+      line-height: normal;
+      font-weight: 900;
+      z-index: 2;
+    }
+
+    
+  </style>
+  <script >
+  </script>
+</head>
+
+<body>
+  <canvas id="unity-canvas"></canvas>
+  <div id="wrapper">
+    <div id="unity-progress-logo">Додо деревня</div>
+    <div id="unity-progress-text">НОВОГОДНЯЯ СКАЗКА</div>
+    <div id="unity-loading-bar">
+      <p id="procents">0%</p>
+      <div id="unity-progress-bar">
+      </div>
+    </div>
+  </div>
+  <script src="Build/build.loader.js"></script>
+  <script>
+    var userId = "";
+      window.addEventListener("message", (e) => {
+        userId = e.data; //TODO: Проверку на ориджин
+        console.log("get msg userId = ", userId);
+      })
+
+    const maxPixelRatioMobile = 2.0;
+    const maxPixelRatioDesktop = 1.5;
+
+    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    var maxDevicePixelRatio = isMobile? maxPixelRatioMobile: maxPixelRatioDesktop;
+    var pixelRatio = Math.min(window.devicePixelRatio, maxDevicePixelRatio);
+
+    var buildUrl = "Build";
+    var loaderUrl = buildUrl + "/build.loader.js";
+    var config = {
+      dataUrl: buildUrl + "/build.data.unityweb",
+      frameworkUrl: buildUrl + "/build.framework.js.unityweb",
+      codeUrl: buildUrl + "/build.wasm.unityweb",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "DefaultCompany",
+      productName: "dodo_NY_Unity",
+      productVersion: "1.0",
+      devicePixelRatio: pixelRatio
+    };
+
+    var canvas = document.querySelector("#unity-canvas");
+    var loadingBar = document.querySelector("#unity-loading-bar");
+    var progressBar = document.querySelector("#unity-progress-bar");
+    var progressLogo = document.querySelector("#unity-progress-logo");
+    var progressText = document.querySelector("#unity-progress-text");
+    var wrapper = document.querySelector("#wrapper");
+    var procents = document.querySelector("#procents");
+    var access_token = "";
+
+    var script = document.createElement("script");
+    script.src = loaderUrl;
+    var ss;
+    script.onload = function() {
+      
+      createUnityInstance(canvas, config, function(progress) {
+        progressBar.style.width = 100 * progress + "%";
+        procents.innerHTML = Math.floor(progress * 100) + "%";
+      }).then(function(unityInstance) {
+        ss = unityInstance;
+        wrapper.style.display = "none";
+        window.removeEventListener("message", (e) => {
+          userId = e.data;
+        });
+
+        if(userId !== "" && userId !== null){
+          console.log("SENDING USER ID: ", userId);
+          ss.SendMessage("JSApi","SetUID",userId);
+        }
+        //on unity loaded
+      }).catch(function(message) {
+        alert(message);
+      });
+    };
+    document.body.appendChild(script);  
+
+
+function log(msg)
+{
+  console.log(msg);
+}
+
+function showCopyToClipboard(text){
+    const data = {
+      type: "handleButton",
+      value: text
+    }
+    window?.parent.postMessage(data, "*");
+}
+function hideCopyToClipboard(){
+    window?.parent.postMessage("closeButton", "*");
+}
+
+window.addEventListener("message", (e) => {
+  if(e.data === "msgDone!"){
+    unityInstance.SendMessage('JSApi','SetCopied');
+  }
+})
+  </script>
+</body>
+
+</html>
