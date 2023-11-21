@@ -201,8 +201,7 @@
         }
         loadingQots.innerHTML = `${txtArray[i] + "..."}`
         i+=1;
-      })
-      .then(function(unityInstance) {
+      }).then(function(unityInstance) {
         ss = unityInstance;
         wrapper.style.display = "none";
         window.removeEventListener("message", (e) => {
@@ -224,6 +223,7 @@
 function log(msg)
 {
   console.log(msg);
+  alert(msg);
 }
 
 function showCopyToClipboard(text){
