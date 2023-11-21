@@ -12,7 +12,7 @@
     }
 
     body {
-      height: 100%;
+      height: 100vh;
       width: 100%;
       text-align: center;
     }
@@ -32,6 +32,22 @@
       src: url('assets/fonts/DodoRounded_v2-Regular.otf');
     }
 
+    #wrapper {
+      position: absolute;
+      bottom: 42vh;
+      left: 20vw;
+      width: 60vw;
+    }
+
+    #loading-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.2vh;
+      width: 100%;
+    }
+
     #unity-canvas {
       position: absolute;
       left: 0px;
@@ -42,33 +58,44 @@
       background-size: cover;
     }
 
+    #progressbar-wrapper{
+      padding: 17px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 30px;
+      width: 100%;
+    }
+
     #unity-loading-bar {
-      position: absolute;
-      left: 30%;
-      top: 50%;
-      width: 40%;
-      height: 1.5rem;
+     
+      display: flex;
+      left: 5vw;
+      top: 10vh;
+      width: 80%;
+      height: 100%;
       background-color: #FDF5E7;
-      border: 1px solid #FDF5E7;
-      border-radius: 10px;
+      border: 3px solid #FDF5E7;
+      border-radius: 30px;
       text-align: center;
     }
 
     #unity-progress-bar {
-      position: absolute;
+      
       left: 0%;
       top: 0%;
       width: 1%;
-      height: 100%;
+
       background-color: #FA8322;
-      border-radius: 10px;
+      border-radius: 30px;
       transition: 400ms linear;
       z-index: 1;
     }
 
     #unity-progress-logo {
       color: #FDF5E7;
-      position: absolute;
+     
       top: 40vh;
       left: 25%;
       flex-shrink: 0;
@@ -82,7 +109,7 @@
 
     #unity-progress-text {
       color: #FDF5E7;
-      position: absolute;
+     
       top: 45vh;
       left: 35%;
       flex-shrink: 0;
@@ -93,18 +120,16 @@
       font-weight: 700;
       line-height: normal;
     }
-
-    #procents {
-      position: absolute;
-      top: 0.2vh;
-      left: 15vw;
-      color: #FA8322;
-      -webkit-text-stroke: #FDF5E7 0.09vh;		
-      font-style: "Dodo Rounded Black";
-      font-size: 5.5vw;
+/*  */
+    #loading-qots {
+      flex-shrink: 0;
+      text-align: center;
+      font-family: "Dodo Rounded v2 Regular";
+      font-size: 3vw;
+      font-style: normal;
+      font-weight: 700;
       line-height: normal;
-      font-weight: 900;
-      z-index: 2;
+      color: #FDF5E7;
     }
 
     
@@ -116,12 +141,13 @@
 <body>
   <canvas id="unity-canvas"></canvas>
   <div id="wrapper">
-    <div id="unity-progress-logo">Додо деревня</div>
-    <div id="unity-progress-text">НОВОГОДНЯЯ СКАЗКА</div>
-    <div id="unity-loading-bar">
-      <p id="procents">0%</p>
-      <div id="unity-progress-bar">
-      </div>
+    <div id = "loading-wrapper">
+      <div id="unity-progress-logo">Додо деревня</div>
+      <div id="unity-progress-text">НОВОГОДНЯЯ СКАЗКА</div>
+      <div id="progressbar-wrapper">
+      <div id="unity-loading-bar"><div id="unity-progress-bar"> </div> </div>
+    </div>
+      <p id="loading-qots">Сажаем ёлки...</p>
     </div>
   </div>
   <script src="Build/build.loader.js"></script>
@@ -134,7 +160,7 @@
 
     const maxPixelRatioMobile = 2.0;
     const maxPixelRatioDesktop = 1.5;
-
+    var txtArray = ["Сажаем ёлки", "Лепим снеговиков", "Подключаем гирлянды", "Смотрим новогодние фильмы", "Печем пиццу", "Нарезаем оливье", "Расчищаем сугробы", "Пакуем подарки", "Учим стихи", "Включаем музыку" ]
     var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     var maxDevicePixelRatio = isMobile? maxPixelRatioMobile: maxPixelRatioDesktop;
     var pixelRatio = Math.min(window.devicePixelRatio, maxDevicePixelRatio);
@@ -158,9 +184,10 @@
     var progressLogo = document.querySelector("#unity-progress-logo");
     var progressText = document.querySelector("#unity-progress-text");
     var wrapper = document.querySelector("#wrapper");
-    var procents = document.querySelector("#procents");
+    var loadingQots = document.querySelector("#loading-qots");
     var access_token = "";
-
+    var i = 0;
+    
     var script = document.createElement("script");
     script.src = loaderUrl;
     var ss;
@@ -168,8 +195,13 @@
       
       createUnityInstance(canvas, config, function(progress) {
         progressBar.style.width = 100 * progress + "%";
-        procents.innerHTML = Math.floor(progress * 100) + "%";
-      }).then(function(unityInstance) {
+        if(i >= txtArray.length){
+          i = 0;
+        }
+        loadingQots.innerHTML = `${txtArray[i] + "..."}`;
+        i+=1;
+      })
+      .then(function(unityInstance) {
         ss = unityInstance;
         wrapper.style.display = "none";
         window.removeEventListener("message", (e) => {
