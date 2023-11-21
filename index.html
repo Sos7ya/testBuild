@@ -12,24 +12,24 @@
     }
 
     body {
-      height: 100vh;
+      height: 100%;
       width: 100%;
       text-align: center;
     }
 
     @font-face {
       font-family: "Dodo Rounded Black";
-      src: url('assets/fonts/DodoRoundedBlack-Expanded.ttf');
+      src: url('fonts/DodoRoundedBlack-Expanded.ttf');
     }
 
     @font-face {
       font-family: "Dodo Rounded v2";
-      src: url('assets/fonts/DodoRounded_v2-Bold.otf');
+      src: url('fonts/DodoRounded_v2-Bold.otf');
     }
 
     @font-face {
       font-family: "Dodo Rounded v2 Regular";
-      src: url('assets/fonts/DodoRounded_v2-Regular.otf');
+      src: url('fonts/DodoRounded_v2-Regular.otf');
     }
 
     #wrapper {
@@ -64,7 +64,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 30px;
+      height: 6vw;
       width: 100%;
     }
 
@@ -132,6 +132,7 @@
       color: #FDF5E7;
     }
 
+
     
   </style>
   <script >
@@ -147,7 +148,7 @@
       <div id="progressbar-wrapper">
       <div id="unity-loading-bar"><div id="unity-progress-bar"> </div> </div>
     </div>
-      <p id="loading-qots">Сажаем ёлки...</p>
+      <p id="loading-qots"></p>
     </div>
   </div>
   <script src="Build/build.loader.js"></script>
@@ -187,7 +188,7 @@
     var loadingQots = document.querySelector("#loading-qots");
     var access_token = "";
     var i = 0;
-    
+
     var script = document.createElement("script");
     script.src = loaderUrl;
     var ss;
@@ -198,7 +199,7 @@
         if(i >= txtArray.length){
           i = 0;
         }
-        loadingQots.innerHTML = `${txtArray[i] + "..."}`;
+        loadingQots.innerHTML = `${txtArray[i] + "..."}`
         i+=1;
       })
       .then(function(unityInstance) {
@@ -225,14 +226,14 @@ function log(msg)
   console.log(msg);
 }
 
-function showCopyToClipboard(text){
+function ShowCopyToClipboard(text){
     const data = {
       type: "handleButton",
       value: text
     }
     window?.parent.postMessage(data, "*");
 }
-function hideCopyToClipboard(){
+function HideCopyToClipboard(){
     window?.parent.postMessage("closeButton", "*");
 }
 
