@@ -193,7 +193,6 @@
     script.src = loaderUrl;
     var ss;
     script.onload = function() {
-      
       createUnityInstance(canvas, config, function(progress) {
         progressBar.style.width = 100 * progress + "%";
         if(i >= txtArray.length){
@@ -223,7 +222,6 @@
 function log(msg)
 {
   console.log(msg);
-  alert(msg);
 }
 
 function showCopyToClipboard(text){
