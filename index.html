@@ -193,6 +193,7 @@
     script.src = loaderUrl;
     var ss;
     script.onload = function() {
+      
       createUnityInstance(canvas, config, function(progress) {
         progressBar.style.width = 100 * progress + "%";
         if(i >= txtArray.length){
@@ -200,7 +201,8 @@
         }
         loadingQots.innerHTML = `${txtArray[i] + "..."}`
         i+=1;
-      }).then(function(unityInstance) {
+      })
+      .then(function(unityInstance) {
         ss = unityInstance;
         wrapper.style.display = "none";
         window.removeEventListener("message", (e) => {
