@@ -226,14 +226,14 @@ function log(msg)
   console.log(msg);
 }
 
-function ShowCopyToClipboard(text){
+function showCopyToClipboard(text){
     const data = {
       type: "handleButton",
       value: text
     }
     window?.parent.postMessage(data, "*");
 }
-function HideCopyToClipboard(){
+function hideCopyToClipboard(){
     window?.parent.postMessage("closeButton", "*");
 }
 
