@@ -201,7 +201,7 @@
             i = Math.floor(Math.random() * txtArray.length);
           }
         }
-        changeQots(txtArray[i]);
+        loadingQots.innerHTML = `${txtArray[i] + "..."}`;
         progressBar.style.width = 100 * progress + "%";
       })
       .then(function(unityInstance) {
@@ -238,10 +238,6 @@ function showCopyToClipboard(text){
 
 function hideCopyToClipboard(){
     window?.parent.postMessage("closeButton", "*");
-}
-
-function changeQots(text){
-  loadingQots.innerHTML = `${text + "..."}`;
 }
 
 window.addEventListener("message", (e) => {
