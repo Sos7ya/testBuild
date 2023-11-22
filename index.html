@@ -208,7 +208,7 @@
 
         if(userId !== "" && userId !== null){
           console.log("SENDING USER ID: ", userId);
-          ss.SendMessage("JSApi","SetUID", `${userId}`);
+          ss.SendMessage("JSApi","SetUID", userId.userId);
         }
         //on unity loaded
       }).catch(function(message) {
