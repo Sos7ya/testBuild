@@ -135,8 +135,6 @@
 
     
   </style>
-  <script >
-  </script>
 </head>
 
 <body>
@@ -161,7 +159,6 @@
 
     const maxPixelRatioMobile = 2.0;
     const maxPixelRatioDesktop = 1.5;
-    var txtArray = ["Сажаем ёлки", "Лепим снеговиков", "Подключаем гирлянды", "Смотрим новогодние фильмы", "Печем пиццу", "Нарезаем оливье", "Расчищаем сугробы", "Пакуем подарки", "Учим стихи", "Включаем музыку" ]
     var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     var maxDevicePixelRatio = isMobile? maxPixelRatioMobile: maxPixelRatioDesktop;
     var pixelRatio = Math.min(window.devicePixelRatio, maxDevicePixelRatio);
@@ -178,7 +175,7 @@
       productVersion: "1.0",
       devicePixelRatio: pixelRatio
     };
-
+    var txtArray = ["Сажаем ёлки", "Лепим снеговиков", "Подключаем гирлянды", "Смотрим новогодние фильмы", "Печем пиццу", "Нарезаем оливье", "Расчищаем сугробы", "Пакуем подарки", "Учим стихи", "Включаем музыку" ];
     var canvas = document.querySelector("#unity-canvas");
     var loadingBar = document.querySelector("#unity-loading-bar");
     var progressBar = document.querySelector("#unity-progress-bar");
@@ -188,13 +185,23 @@
     var loadingQots = document.querySelector("#loading-qots");
     var access_token = "";
     var i = 0;
-
+    var timeStamp = Date.now();
     var script = document.createElement("script");
     script.src = loaderUrl;
     var ss;
+  
     script.onload = function() {
-      addinQots();
       createUnityInstance(canvas, config, function(progress) {
+        var timeLoad = Date.now();
+        var timeDiff = timeLoad - timeStamp;
+        console.log("timeDiff = ", timeDiff);
+        if(timeDiff > 250){
+          i++;
+          if(i > txtArray.length){
+            i = Math.floor(Math.random() * txtArray.length);
+          }
+        }
+        changeQots(txtArray[i]);
         progressBar.style.width = 100 * progress + "%";
       })
       .then(function(unityInstance) {
@@ -228,18 +235,13 @@ function showCopyToClipboard(text){
     }
     window?.parent.postMessage(data, "*");
 }
-async function addinQots(){
-  setInterval(function(){
-    if(i >= txtArray.length){
-          i = 0;
-    }
-    loadingQots.innerHTML = `${txtArray[i] + "..."}`
-    i+=1;
-  }, 2500)
-}
 
 function hideCopyToClipboard(){
     window?.parent.postMessage("closeButton", "*");
+}
+
+function changeQots(text){
+  loadingQots.innerHTML = `${text + "..."}`;
 }
 
 window.addEventListener("message", (e) => {
