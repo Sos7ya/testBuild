@@ -205,10 +205,6 @@
       .then(function(unityInstance) {
         ss = unityInstance;
         wrapper.style.display = "none";
-        window.removeEventListener("message", (e) => {
-          userId = e.data;
-        });
-
         
         if(userId !== "" && userId !== null){
           console.log("SENDING USER ID: ", userId);
@@ -221,13 +217,13 @@
     };
     document.body.appendChild(script);  
 
-  window.addEventListener("message", (e) => {
-    console.log("GET MSG = ", e.data);
-    if(e.data === "msgDone!"){
-      console.log("SUCSESS msgDone!");
-      ss.SendMessage('JSApi','SetCopied');
-    }
-  });
+    window.addEventListener("message", (e) => {
+      console.log("GET MSG = ", e.data);
+      if(e.data === "msgDone!"){
+        console.log("SUCSESS msgDone!");
+        ss.SendMessage('JSApi','SetCopied', true);
+      }
+    });
 function log(msg)
 {
   console.log(msg);
