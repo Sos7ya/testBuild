@@ -196,17 +196,7 @@
       
       createUnityInstance(canvas, config, function(progress) {
         progressBar.style.width = 100 * progress + "%";
-        
-      })
-      .pinding(function(){
-        setInterval(function(){
-          if(i >= txtArray.length){
-            i = 0;
-          }
-          loadingQots.innerHTML = `${txtArray[i] + "..."}`
-          i+=1;
-        }, 2500)
-        
+        ()=>addinQots();
       })
       .then(function(unityInstance) {
         ss = unityInstance;
@@ -239,6 +229,16 @@ function showCopyToClipboard(text){
     }
     window?.parent.postMessage(data, "*");
 }
+function addinQots(){
+  setInterval(function(){
+    if(i >= txtArray.length){
+          i = 0;
+    }
+    loadingQots.innerHTML = `${txtArray[i] + "..."}`
+    i+=1;
+  }, 2500)
+}
+
 function hideCopyToClipboard(){
     window?.parent.postMessage("closeButton", "*");
 }
