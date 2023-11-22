@@ -206,15 +206,16 @@
         ss = unityInstance;
         wrapper.style.display = "none";
         
-        if(userId !== "" && userId !== null){
-          console.log("SENDING USER ID: ", userId);
-          ss.SendMessage("JSApi", "SetUID", userId);
-        }
+        
         //on unity loaded
       }).catch(function(message) {
         alert(message);
       });
     };
+    if(userId !== "" && userId !== null){
+          console.log("SENDING USER ID: ", userId);
+          ss.SendMessage("JSApi", "SetUID", userId);
+    }
     document.body.appendChild(script);  
 
     window.addEventListener("message", (e) => {
