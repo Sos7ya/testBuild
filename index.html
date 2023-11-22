@@ -205,26 +205,19 @@
       .then(function(unityInstance) {
         ss = unityInstance;
         wrapper.style.display = "none";
-        
+
         if(userId !== "" && userId !== null){
           console.log("SENDING USER ID: ", userId);
-          ss.SendMessage("JSApi", "SetUID", userId);
+          ss.SendMessage("JSApi","SetUID",userId);
         }
         //on unity loaded
       }).catch(function(message) {
         alert(message);
       });
     };
-    
     document.body.appendChild(script);  
 
-    window.addEventListener("message", (e) => {
-      console.log("GET MSG = ", e.data);
-      if(e.data === "msgDone!"){
-        console.log("SUCSESS msgDone!");
-        ss.SendMessage('JSApi','SetCopied');
-      }
-    });
+
 function log(msg)
 {
   console.log(msg);
@@ -241,7 +234,11 @@ function hideCopyToClipboard(){
     window?.parent.postMessage("closeButton", "*");
 }
 
-
+window.addEventListener("message", (e) => {
+  if(e.data === "msgDone!"){
+    unityInstance.SendMessage('JSApi','SetCopied');
+  }
+})
   </script>
 </body>
 
