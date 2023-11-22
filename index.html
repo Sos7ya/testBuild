@@ -197,9 +197,6 @@
         var timeDiff = timeLoad - timeStamp;
         if(timeDiff > 120){
           i++;
-          if(i > txtArray.length){
-            i = Math.floor(Math.random() * txtArray.length);
-          }
           changeQots(txtArray[i]);
         }
         progressBar.style.width = 100 * progress + "%";
@@ -241,6 +238,9 @@ function hideCopyToClipboard(){
 }
 
 function changeQots(text){
+  if(i > txtArray.length){
+            i = Math.floor(Math.random() * txtArray.length-1);
+  }
   loadingQots.innerHTML = `${text + "..."}`;
 }
 
