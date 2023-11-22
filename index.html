@@ -155,7 +155,7 @@
   <script>
     var userId = "";
       window.addEventListener("message", (e) => {
-        userId = e.data; //TODO: Проверку на ориджин
+        userId = e.data;
         console.log("get msg userId = ", userId);
       })
 
@@ -208,7 +208,7 @@
         
         if(userId !== "" && userId !== null){
           console.log("SENDING USER ID: ", userId);
-         // ss.SendMessage("JSApi","SetUID",userId);
+          ss.SendMessage("JSAPI","SetUID",userId);
         }
         //on unity loaded
       }).catch(function(message) {
@@ -221,7 +221,7 @@
       console.log("GET MSG = ", e.data);
       if(e.data === "msgDone!"){
         console.log("SUCSESS msgDone!");
-        ss.SendMessage('JSApi','SetCopied');
+        ss.SendMessage('JSAPI','SetCopied');
       }
     });
 function log(msg)
