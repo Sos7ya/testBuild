@@ -239,7 +239,7 @@ function hideCopyToClipboard(){
 
 window.addEventListener("message", (e) => {
   if(e.data === "msgDone!"){
-    unityInstance.SendMessage('JSApi','SetCopied');
+    ss.SendMessage('JSApi','SetCopied');
   }
 })
   </script>
