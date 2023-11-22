@@ -193,10 +193,9 @@
     script.src = loaderUrl;
     var ss;
     script.onload = function() {
-      
+      addinQots();
       createUnityInstance(canvas, config, function(progress) {
         progressBar.style.width = 100 * progress + "%";
-        ()=>addinQots();
       })
       .then(function(unityInstance) {
         ss = unityInstance;
@@ -229,7 +228,7 @@ function showCopyToClipboard(text){
     }
     window?.parent.postMessage(data, "*");
 }
-function addinQots(){
+async function addinQots(){
   setInterval(function(){
     if(i >= txtArray.length){
           i = 0;
