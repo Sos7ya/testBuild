@@ -185,24 +185,23 @@
     var loadingQots = document.querySelector("#loading-qots");
     var access_token = "";
     var i = 0;
-    var timeStamp = Date.now();
+    
     var script = document.createElement("script");
     script.src = loaderUrl;
     var ss;
   
     script.onload = function() {
-      
+      var timeStamp = Date.now();
       createUnityInstance(canvas, config, function(progress) {
         var timeLoad = Date.now();
         var timeDiff = timeLoad - timeStamp;
-        console.log("timeDiff = ", timeDiff);
-        if(timeDiff > 250){
+        if(timeDiff > 120){
           i++;
           if(i > txtArray.length){
             i = Math.floor(Math.random() * txtArray.length);
           }
+          changeQots(txtArray[i]);
         }
-        changeQots(txtArray[i]);
         progressBar.style.width = 100 * progress + "%";
       })
       .then(function(unityInstance) {
