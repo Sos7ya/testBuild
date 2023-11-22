@@ -239,6 +239,7 @@ function hideCopyToClipboard(){
 
 window.addEventListener("message", (e) => {
   if(e.data === "msgDone!"){
+    console.log("SUCSESS msgDone!");
     ss.SendMessage('JSApi','SetCopied');
   }
 })
