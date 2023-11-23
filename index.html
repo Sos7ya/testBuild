@@ -214,9 +214,6 @@
         console.log("LOADING TIME: ", timeDiff);
         if(updated && timeDiff > 20){
           i+=1;
-          if(i > txtArray.length){
-            i = Math.floor(Math.random() * 5);
-          }
           changeQots(i);
         }
         progressBar.style.width = 100 * progress + "%";
@@ -259,7 +256,7 @@ function hideCopyToClipboard(){
 
 function changeQots(i){
   if(i > txtArray.length){
-     i = Math.floor(Math.random() * 5);
+     i = Math.floor(Math.random() * txtArray.length);
   }
   loadingQots.innerHTML = `${txtArray[i] + "..."}`;
 }
