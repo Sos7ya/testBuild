@@ -106,7 +106,7 @@
       top: 40vh;
       left: 25%;
       flex-shrink: 0;
-      flex-wrap: nowrap;
+      white-space: nowrap;
       text-align: center;
       font-family: "Dodo Rounded Black";
       font-size: 7vw;
@@ -216,6 +216,13 @@
         if(updated && timeDiff > 20){
           i+=1;
           changeQots(i);
+        }
+        if(100*progress >= 10){
+          progressBar.style.display = "none";
+        }
+        else{
+          progressBar.style.display = "block";
+          progressBar.style.width = 100 * progress + "%";
         }
         progressBar.style.width = 100 * progress + "%";
       })
