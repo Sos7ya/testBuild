@@ -4,7 +4,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>dodo_NY_Unity</title>
+  <title>Додо Деревня</title>
   <style>
     * {
       padding: 0;
@@ -31,6 +31,8 @@
       font-family: "Dodo Rounded v2 Regular";
       src: url('fonts/DodoRounded_v2-Regular.otf');
     }
+
+
     #main-loading-wrapper{
       height: 100%;
       width: 100%;
@@ -40,6 +42,7 @@
       background-image: url(loadingBG.png);
       background-size: cover;
     }
+
     #wrapper {
       position: absolute;
       bottom: 42vh;
@@ -54,6 +57,11 @@
       justify-content: center;
       gap: 0.2vh;
       width: 100%;
+    }
+
+    #unity-canvas:before {
+      content: "";
+      background-color: #4E86B7;
     }
 
     #unity-canvas {
@@ -170,12 +178,9 @@
       <p id="loading-qots"></p>
     </div>
   </div>
-</div>
-  <script src="Build/build.loader.js"></script>
+  <script src="Build/dodo_NY_Client.loader.js"></script>
   <script>
-    var myHash = window.location.hash;
-    var userId = myHash.slice(1);
-
+    
     const maxPixelRatioMobile = 2.0;
     const maxPixelRatioDesktop = 1.5;
     var txtArray = ["Сажаем ёлки", "Лепим снеговиков", "Подключаем гирлянды", "Смотрим новогодние фильмы", "Печем пиццу", "Нарезаем оливье", "Расчищаем сугробы", "Пакуем подарки", "Учим стихи", "Включаем музыку" ]
@@ -184,17 +189,18 @@
     var pixelRatio = Math.min(window.devicePixelRatio, maxDevicePixelRatio);
 
     var buildUrl = "Build";
-    var loaderUrl = buildUrl + "/build.loader.js";
+    var loaderUrl = buildUrl + "/dodo_NY_Client.loader.js";
     var config = {
-      dataUrl: buildUrl + "/build.data.unityweb",
-      frameworkUrl: buildUrl + "/build.framework.js.unityweb",
-      codeUrl: buildUrl + "/build.wasm.unityweb",
+      dataUrl: buildUrl + "/4d733c236dd488b660ce8240fd4b0150.data.br",
+      frameworkUrl: buildUrl + "/d41d8cd98f00b204e9800998ecf8427e.js.br",
+      codeUrl: buildUrl + "/d41d8cd98f00b204e9800998ecf8427e.wasm.br",
       streamingAssetsUrl: "StreamingAssets",
-      companyName: "DefaultCompany",
-      productName: "dodo_NY_Unity",
-      productVersion: "1.0",
+      companyName: "Herbarium Games",
+      productName: "Додо Деревня",
+      productVersion: "1.0.14",
       devicePixelRatio: pixelRatio
     };
+
 
     var canvas = document.querySelector("#unity-canvas");
     var loadingBar = document.querySelector("#unity-loading-bar");
@@ -205,7 +211,7 @@
     var loadingQots = document.querySelector("#loading-qots");
     var access_token = "";
     var i = 0;
-    
+
     var script = document.createElement("script");
     script.src = loaderUrl;
     var ss;
@@ -230,24 +236,50 @@
         }
       })
       .then(function(unityInstance) {
+        
         ss = unityInstance;
         progressBar.style.width = 100 + "%";
-        setTimeout(()=>{wrapper.style.display = "none";}, 1000)
-        if(userId !== "" && userId !== null){
-          console.log("SENDING USER ID: ", userId);
-          ss.SendMessage("JSApi","SetUID", userId);
-        }
-        //on unity loaded
+        setTimeout(()=>{wrapper.style.display = "none";}, 500);
+
+        log(`window.location.href:${window.location.href}`);
+        log(`window.location.hash:${window.location.hash}`);
+
+        ss.SendMessage("JSApi","SetUID", decodeURIComponent(window.location.hash));
+
       }).catch(function(message) {
         alert(message);
       });
     };
-    document.body.appendChild(script);
+
+    window.onblur = () => {
+      if(ss != null){
+        ss.SendMessage("JSApi","DisableAudio");
+      }
+    }
+
+    window.onfocus = () => {
+      if(ss != null){
+        ss.SendMessage("JSApi","EnableAudio");
+      }
+    }
+
+    document.body.appendChild(script); 
 
 
 function log(msg)
 {
-  console.log(msg);
+  if(ss != null && ss != undefined)
+    ss.SendMessage("JSApi", "LogUnity", msg);
+}
+
+function sendUrl(url)
+{
+  const data = {
+    type: "openURL",
+    url: url
+  }
+
+  window?.parent.postMessage(data, "*");
 }
 
 function showCopyToClipboard(text){
@@ -261,6 +293,10 @@ function hideCopyToClipboard(){
     window?.parent.postMessage("closeButton", "*");
 }
 
+function closeGame(){
+    window?.parent.postMessage("closeGameRider", "*");
+}
+
 function changeQuotes(i) {
   if (i >= txtArray.length) {
     i = Math.floor(Math.random() * txtArray.length);
@@ -271,6 +307,14 @@ function changeQuotes(i) {
 window.addEventListener("message", (e) => {
   if(e.data === "msgDone!"){
     ss.SendMessage('JSApi','SetCopied');
+  }
+  if(e.data === "onFocus")
+  {
+    ss.SendMessage("JSApi","EnableAudio");
+  }
+  if(e.data === "onBlur")
+  {
+    ss.SendMessage("JSApi","DisableAudio");
   }
 })
   </script>
